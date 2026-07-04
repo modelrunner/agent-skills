@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "modelrunner": {
+      "type": "http",
+      "url": "https://mcp.modelrunner.run/mcp"
+    }
+  }
+}

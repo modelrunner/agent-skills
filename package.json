@@ -1,0 +1,31 @@
+{
+  "name": "agent-skills",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Portable AI-assistant skills powered by ModelRunner — authored once as SKILL.md, built for Claude Code, Codex, Cursor, and GitHub Copilot.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "keywords": [
+    "ai",
+    "agent-skills",
+    "skills",
+    "modelrunner",
+    "claude-code",
+    "codex",
+    "cursor",
+    "github-copilot",
+    "mcp",
+    "app-store-screenshots",
+    "ios",
+    "image-generation"
+  ],
+  "author": "ModelRunner (https://modelrunner.run)",
+  "license": "MIT",
+  "homepage": "https://modelrunner.run",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/modelrunner/agent-skills"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "ios-demo-assets",
+  "description": "Bulk-generate demo/sample images for an iOS app with AI and load them into Xcode's Assets.xcassets and the iOS Simulator's Photos library. Powered by ModelRunner (https://modelrunner.run). Use when the user needs sample photos to exercise a photo-driven iOS feature, wants to populate the Simulator photo picker, or needs on-spec placeholder images for an Xcode project.",
+  "version": "0.1.0",
+  "author": {
+    "name": "ModelRunner",
+    "url": "https://modelrunner.run"
+  },
+  "homepage": "https://modelrunner.run",
+  "repository": "https://github.com/modelrunner/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "modelrunner",
+    "ai",
+    "skill",
+    "mcp",
+    "ios",
+    "demo",
+    "assets"
+  ],
+  "mcpServers": {
+    "modelrunner": {
+      "type": "http",
+      "url": "https://mcp.modelrunner.run/mcp"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.*
+__pycache__/
+*.pyc
+# NOTE: dist/ is intentionally committed so directory sites can index the generated per-tool
+# artifacts. Regenerate with `npm run build`.

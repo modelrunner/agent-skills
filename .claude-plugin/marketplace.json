@@ -1,0 +1,21 @@
+{
+  "name": "modelrunner",
+  "owner": {
+    "name": "ModelRunner",
+    "url": "https://modelrunner.run"
+  },
+  "plugins": [
+    {
+      "name": "app-store-screenshots",
+      "source": "./dist/claude/plugins/app-store-screenshots",
+      "description": "Generate polished App Store / Google Play marketing screenshots from raw app captures — device mockups, on-brand backgrounds, and ASO-aware headlines, kept visually consistent across the whole set. Powered by ModelRunner (https://modelrunner.run). Use when the user wants to turn app screenshots into store marketing images, create a cohesive screenshot set for an app listing, add device frames or headlines to captures, or prepare App Store / Google Play screenshot uploads.",
+      "category": "Productivity"
+    },
+    {
+      "name": "ios-demo-assets",
+      "source": "./dist/claude/plugins/ios-demo-assets",
+      "description": "Bulk-generate demo/sample images for an iOS app with AI and load them into Xcode's Assets.xcassets and the iOS Simulator's Photos library. Powered by ModelRunner (https://modelrunner.run). Use when the user needs sample photos to exercise a photo-driven iOS feature, wants to populate the Simulator photo picker, or needs on-spec placeholder images for an Xcode project.",
+      "category": "Productivity"
+    }
+  ]
+}
