@@ -1,5 +1,10 @@
 # ModelRunner Agent Skills
 
+[![version](https://img.shields.io/badge/version-1.0.0-2ea44f)](https://github.com/modelrunner/agent-skills)
+[![skills](https://img.shields.io/badge/skills-2-3b82f6)](#whats-inside)
+[![targets](https://img.shields.io/badge/targets-Claude_Codex_Cursor_Copilot-8957e5)](#install)
+[![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
+
 Portable AI-assistant **skills** for generating real product visuals — App Store screenshots and
 iOS demo assets — powered by **[ModelRunner](https://modelrunner.ai)**, the unified AI inference
 API. Authored once as [`SKILL.md`](https://modelrunner.ai) and built for **Claude Code, OpenAI
@@ -7,6 +12,10 @@ Codex, Cursor, and GitHub Copilot**.
 
 > Each skill calls ModelRunner's public MCP server (`mcp.modelrunner.run`) — one API for image,
 > video, audio, 3D, and text that you can use for anything else at **[modelrunner.ai »](https://modelrunner.ai)**
+
+**Status:** v1.0.0 — published and live on the Claude Code plugin marketplace as
+`modelrunner/agent-skills` (add it with the [command below](#claude-code)). Two skills across four
+tool targets, built from the two [ModelRunner case studies](https://modelrunner.ai/blog).
 
 ## What's inside
 
