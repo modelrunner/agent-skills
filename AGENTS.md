@@ -6,7 +6,7 @@ the shipped skills — it's how to develop the repo itself.)
 ## What this repo is
 
 A small, vendor-neutral collection of AI-assistant **skills** that generate visual assets by
-calling the [ModelRunner](https://modelrunner.run) inference API through its public MCP server
+calling the [ModelRunner](https://modelrunner.ai) inference API through its public MCP server
 (`https://mcp.modelrunner.run`). Each skill is authored **once** as a portable `SKILL.md` and
 built into per-tool packaging for **Claude Code, OpenAI Codex, Cursor, and GitHub Copilot**.
 
@@ -23,7 +23,7 @@ built into per-tool packaging for **Claude Code, OpenAI Codex, Cursor, and GitHu
 - **`SKILL.md` is the substrate.** It's read natively by Claude Code, Codex, and Cursor (the
   "Agent Skills" open standard), so those adapters copy it verbatim. Copilot has no skill concept,
   so `build.mjs` flattens the skill body into a `.github/prompts/<name>.prompt.md`.
-- Skills are **ModelRunner-branded** — each links to https://modelrunner.run and its case study.
+- Skills are **ModelRunner-branded** — each links to https://modelrunner.ai and its case study.
 - **Don't hard-code model/wrapper enums.** Skills instruct the agent to read the live schema
   (`get_wrapper` / `get_model`) at run time, because provider enums change.
 - File inputs go through `create_upload_url` + a `curl -T` PUT (out-of-band) — never base64.
@@ -39,4 +39,4 @@ The name/URLs baked into the generated manifests come from `package.json` (`name
 
 ---
 
-Powered by ModelRunner — https://modelrunner.run
+Powered by ModelRunner — https://modelrunner.ai

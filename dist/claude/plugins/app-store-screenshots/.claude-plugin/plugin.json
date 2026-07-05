@@ -1,12 +1,13 @@
 {
   "name": "app-store-screenshots",
-  "description": "Generate polished App Store / Google Play marketing screenshots from raw app captures — device mockups, on-brand backgrounds, and ASO-aware headlines, kept visually consistent across the whole set. Powered by ModelRunner (https://modelrunner.run). Use when the user wants to turn app screenshots into store marketing images, create a cohesive screenshot set for an app listing, add device frames or headlines to captures, or prepare App Store / Google Play screenshot uploads.",
-  "version": "0.1.0",
+  "displayName": "App Store Screenshots",
+  "description": "Generate polished App Store / Google Play marketing screenshots from raw app captures — device mockups, on-brand backgrounds, and ASO-aware headlines, kept visually consistent across the whole set. Powered by ModelRunner (https://modelrunner.ai). Use when the user wants to turn app screenshots into store marketing images, create a cohesive screenshot set for an app listing, add device frames or headlines to captures, or prepare App Store / Google Play screenshot uploads.",
+  "version": "1.0.0",
   "author": {
     "name": "ModelRunner",
-    "url": "https://modelrunner.run"
+    "url": "https://modelrunner.ai"
   },
-  "homepage": "https://modelrunner.run",
+  "homepage": "https://modelrunner.ai",
   "repository": "https://github.com/modelrunner/agent-skills",
   "license": "MIT",
   "keywords": [
@@ -14,6 +15,7 @@
     "ai",
     "skill",
     "mcp",
+    "image-generation",
     "app",
     "store",
     "screenshots"

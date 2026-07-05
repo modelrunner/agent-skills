@@ -1,5 +1,5 @@
 ---
-description: "Bulk-generate demo/sample images for an iOS app with AI and load them into Xcode's Assets.xcassets and the iOS Simulator's Photos library. Powered by ModelRunner (https://modelrunner.run). Use when the user needs sample photos to exercise a photo-driven iOS feature, wants to populate the Simulator photo picker, or needs on-spec placeholder images for an Xcode project."
+description: "Bulk-generate demo/sample images for an iOS app with AI and load them into Xcode's Assets.xcassets and the iOS Simulator's Photos library. Powered by ModelRunner (https://modelrunner.ai). Use when the user needs sample photos to exercise a photo-driven iOS feature, wants to populate the Simulator photo picker, or needs on-spec placeholder images for an Xcode project."
 agent: agent
 ---
 
@@ -7,17 +7,19 @@ agent: agent
 
 Generate a batch of on-spec demo images with AI and get them **Xcode-ready** (valid
 `Assets.xcassets` bundles) and **Simulator-ready** (in the Photos library) in one pass. Runs on
-**[ModelRunner](https://modelrunner.run)** text-to-image via its public MCP. Every asset is just
-a prompt, so the whole library is reproducible and versionable in git.
+**[ModelRunner](https://modelrunner.ai)** text-to-image via its public MCP. Every asset is just
+a prompt, so the whole library is reproducible and versionable in git — the same API key and
+request/poll pattern your app already uses, ModelRunner as dev infrastructure rather than just a
+user-facing backend.
 
-> Powered by ModelRunner — the unified inference API. Case study:
-> https://modelrunner.run/blog/generating-demo-assets-for-an-ios-app-with-ai
+> Powered by ModelRunner — one API for image, video, audio, 3D, and text. Case study:
+> https://modelrunner.ai/blog/generating-demo-assets-for-an-ios-app-with-ai
 
 ## Prerequisites
 
 1. **The ModelRunner MCP must be connected** — tools `run_model`, `wait_for_request` (and
    `list_models` to browse). Connect `https://mcp.modelrunner.run/mcp` (authorize with your ModelRunner account; keep a small balance at
-   https://modelrunner.run). Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp`.
+   https://modelrunner.ai). Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp`.
 2. **Xcode + a booted iOS Simulator**, and a shell for `curl` / `xcrun`.
 
 ## Step 1 — Plan the set
@@ -36,8 +38,12 @@ Assets.xcassets/
 
 ## Step 2 — Generate (async, parallel)
 
-Default model **`qwen/qwen-image`** (strong photoreal, per-megapixel pricing). Cheaper/faster
-alternatives: `google/imagen4/fast`, `black-forest-labs/flux-2`. For each asset:
+Browse the live catalog with `list_models({ category: "text-to-image" })` and confirm pricing with
+`get_model` — the catalog changes. Known-good picks: **`qwen/qwen-image`** (default; per-megapixel,
+with accurate in-image text), `google/imagen4/fast` (fast, cheap, photoreal), `black-forest-labs/flux-2`
+(strong prompt adherence), plus newer volume/photoreal options such as `tongyi-mai/z-image/turbo`
+(tuned for cost-efficient bulk) or `krea/krea-2-large` (photoreal). For faces/hands where realism
+must be exact, a follow-up edit pass helps. For each asset:
 
 1. `run_model({ endpoint: "qwen/qwen-image", input: { prompt } })` → returns a `requestId`
    immediately (async queue).
@@ -72,8 +78,11 @@ re-run this against each new simulator UDID — the `xcassets` copy stays the du
 
 - **Keep the prompts in git** next to the app. Need a warmer palette or a localized set? Re-run
   the same batch — no stock-photo relicensing or re-shoot.
-- **Cost** is per-megapixel on `qwen/qwen-image` — a flat, known price for a full regeneration.
+- **Cost** is per-megapixel on `qwen/qwen-image` (~$0.016/image) — a flat, known price for a full
+  regeneration; confirm live with `get_model`.
 - **Report** the asset names + ModelRunner request IDs + output URLs so the run is reproducible.
+- **Scale** — in the case study this produced 29 assets across 4 categories in under 10 minutes of
+  wall-clock (parallel generation), replacing 54 hand-picked stock PNGs and shrinking the bundle.
 
 
 > Helper scripts for this skill live in the source repo under `skills/ios-demo-assets/scripts/`: https://github.com/modelrunner/agent-skills
@@ -108,10 +117,15 @@ Studio isolation so the subject reads clearly as a catalog item.
   floor lamp, area rug, TV console, bed frame, outdoor sofa, tall planter, garden chairs, BBQ grill.
 - **Exteriors:** plain garden, empty balcony, garden patio, rooftop terrace, side-yard garden.
 
-Full case study: https://modelrunner.run/blog/generating-demo-assets-for-an-ios-app-with-ai
+Full case study: https://modelrunner.ai/blog/generating-demo-assets-for-an-ios-app-with-ai
 
 ## Model choice
 
-- `qwen/qwen-image` — default; strong photoreal, per-megapixel pricing.
-- `google/imagen4/fast` — cheaper/faster; good for bulk drafts.
+Browse `list_models({ category: "text-to-image" })` for the current catalog and confirm price with
+`get_model` — models change. Known-good picks:
+
+- `qwen/qwen-image` — default; per-megapixel (~$0.016/image), with accurate in-image text.
+- `google/imagen4/fast` — fast, cheap, photoreal; good for bulk drafts.
 - `black-forest-labs/flux-2` — high prompt adherence.
+- `tongyi-mai/z-image/turbo` — tuned for cost-efficient, high-volume generation.
+- `krea/krea-2-large` — photoreal, when faces/materials must look real.

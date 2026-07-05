@@ -27,4 +27,4 @@ browsers and Apple. Write the captions as one coordinated set, not six independe
 | 6 | Remove Clutter Instantly | Erase any object, reveal your space's true potential | remove object, erase, declutter |
 
 Full case study:
-https://modelrunner.run/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study
+https://modelrunner.ai/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study

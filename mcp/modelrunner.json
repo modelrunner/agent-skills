@@ -1,8 +1,8 @@
 {
   "name": "modelrunner",
-  "description": "ModelRunner — unified AI inference API for image, video, and audio generation.",
-  "homepage": "https://modelrunner.run",
-  "docs": "https://modelrunner.run/docs",
+  "description": "ModelRunner — one API for every AI model: image, video, audio, 3D, and text, from the best providers.",
+  "homepage": "https://modelrunner.ai",
+  "docs": "https://modelrunner.ai/docs",
   "transport": "http",
   "url": "https://mcp.modelrunner.run/mcp"
 }

@@ -34,12 +34,15 @@ const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
 const mcp = JSON.parse(readFileSync(join(ROOT, 'mcp', 'modelrunner.json'), 'utf8'));
 const REPO = (pkg.repository?.url ?? 'https://github.com/modelrunner/agent-skills').replace(/\.git$/, '');
 const MARKETPLACE = 'modelrunner';
-const HOMEPAGE = pkg.homepage ?? 'https://modelrunner.run';
+const MARKETPLACE_DESC = pkg.description ?? 'ModelRunner skills for generating real product visuals.';
+const HOMEPAGE = pkg.homepage ?? 'https://modelrunner.ai';
 const AUTHOR = { name: 'ModelRunner', url: HOMEPAGE };
 
 // ---- helpers ---------------------------------------------------------------
 const writeText = (p, s) => { mkdirSync(dirname(p), { recursive: true }); writeFileSync(p, s); };
 const writeJson = (p, o) => writeText(p, JSON.stringify(o, null, 2) + '\n');
+// Skip Python bytecode when copying skill dirs, so dist/ never accumulates __pycache__/*.pyc.
+const COPY = { recursive: true, filter: (src) => !src.includes('__pycache__') && !src.endsWith('.pyc') };
 
 /** Minimal YAML-frontmatter reader for our controlled SKILL.md files (name + folded description). */
 function frontmatter(raw) {
@@ -75,12 +78,14 @@ function readSkills() {
     .map((name) => {
       const dir = join(SKILLS_DIR, name);
       const { data, body } = frontmatter(readFileSync(join(dir, 'SKILL.md'), 'utf8'));
-      return { name, dir, description: data.description ?? '', body };
+      // Human-readable title for `displayName`: the skill body's first H1, else the kebab name.
+      const title = (body.match(/^#\s+(.+?)\s*$/m)?.[1] ?? name).trim();
+      return { name, dir, title, description: data.description ?? '', body };
     });
 }
 
 const keywordsFor = (name) => [
-  ...new Set(['modelrunner', 'ai', 'skill', 'mcp', ...name.split('-')]),
+  ...new Set(['modelrunner', 'ai', 'skill', 'mcp', 'image-generation', ...name.split('-')]),
 ];
 
 // ---- adapters --------------------------------------------------------------
@@ -90,11 +95,12 @@ function buildClaude(skills) {
   const plugins = [];
   for (const s of skills) {
     const pluginDir = join(base, 'plugins', s.name);
-    cpSync(s.dir, join(pluginDir, 'skills', s.name), { recursive: true });
+    cpSync(s.dir, join(pluginDir, 'skills', s.name), COPY);
     writeJson(join(pluginDir, '.claude-plugin', 'plugin.json'), {
       name: s.name,
+      displayName: s.title,
       description: s.description,
-      version: '0.1.0',
+      version: pkg.version,
       author: AUTHOR,
       homepage: HOMEPAGE,
       repository: REPO,
@@ -102,24 +108,24 @@ function buildClaude(skills) {
       keywords: keywordsFor(s.name),
       mcpServers: servers.mcpServers,
     });
-    plugins.push({ name: s.name, source: `./dist/claude/plugins/${s.name}`, description: s.description, category: 'Productivity' });
+    plugins.push({ name: s.name, displayName: s.title, source: `./dist/claude/plugins/${s.name}`, description: s.description, category: 'Productivity' });
   }
   // marketplace.json must live at the REPO ROOT so `/plugin marketplace add <owner>/<repo>` finds it;
   // its plugin `source` paths point back into dist/claude/plugins/.
-  writeJson(join(ROOT, '.claude-plugin', 'marketplace.json'), { name: MARKETPLACE, owner: AUTHOR, plugins });
+  writeJson(join(ROOT, '.claude-plugin', 'marketplace.json'), { name: MARKETPLACE, owner: AUTHOR, description: MARKETPLACE_DESC, plugins });
   writeJson(join(base, '.mcp.json'), servers);
 }
 
 function buildCodex(skills) {
   const base = join(DIST, 'codex');
-  for (const s of skills) cpSync(s.dir, join(base, 'skills', s.name), { recursive: true });
+  for (const s of skills) cpSync(s.dir, join(base, 'skills', s.name), COPY);
   writeText(join(base, 'config.toml.snippet'),
     `# Merge into ~/.codex/config.toml\n[mcp_servers.${mcp.name}]\ntype = "http"\nurl = "${mcp.url}"\n`);
 }
 
 function buildCursor(skills) {
   const base = join(DIST, 'cursor');
-  for (const s of skills) cpSync(s.dir, join(base, '.cursor', 'skills', s.name), { recursive: true });
+  for (const s of skills) cpSync(s.dir, join(base, '.cursor', 'skills', s.name), COPY);
   writeJson(join(base, '.cursor', 'mcp.json'), { mcpServers: { [mcp.name]: { url: mcp.url } } });
 }
 

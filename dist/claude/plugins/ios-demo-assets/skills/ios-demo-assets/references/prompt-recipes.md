@@ -25,10 +25,15 @@ Studio isolation so the subject reads clearly as a catalog item.
   floor lamp, area rug, TV console, bed frame, outdoor sofa, tall planter, garden chairs, BBQ grill.
 - **Exteriors:** plain garden, empty balcony, garden patio, rooftop terrace, side-yard garden.
 
-Full case study: https://modelrunner.run/blog/generating-demo-assets-for-an-ios-app-with-ai
+Full case study: https://modelrunner.ai/blog/generating-demo-assets-for-an-ios-app-with-ai
 
 ## Model choice
 
-- `qwen/qwen-image` — default; strong photoreal, per-megapixel pricing.
-- `google/imagen4/fast` — cheaper/faster; good for bulk drafts.
+Browse `list_models({ category: "text-to-image" })` for the current catalog and confirm price with
+`get_model` — models change. Known-good picks:
+
+- `qwen/qwen-image` — default; per-megapixel (~$0.016/image), with accurate in-image text.
+- `google/imagen4/fast` — fast, cheap, photoreal; good for bulk drafts.
 - `black-forest-labs/flux-2` — high prompt adherence.
+- `tongyi-mai/z-image/turbo` — tuned for cost-efficient, high-volume generation.
+- `krea/krea-2-large` — photoreal, when faces/materials must look real.

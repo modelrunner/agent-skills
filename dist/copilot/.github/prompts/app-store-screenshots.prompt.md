@@ -1,5 +1,5 @@
 ---
-description: "Generate polished App Store / Google Play marketing screenshots from raw app captures — device mockups, on-brand backgrounds, and ASO-aware headlines, kept visually consistent across the whole set. Powered by ModelRunner (https://modelrunner.run). Use when the user wants to turn app screenshots into store marketing images, create a cohesive screenshot set for an app listing, add device frames or headlines to captures, or prepare App Store / Google Play screenshot uploads."
+description: "Generate polished App Store / Google Play marketing screenshots from raw app captures — device mockups, on-brand backgrounds, and ASO-aware headlines, kept visually consistent across the whole set. Powered by ModelRunner (https://modelrunner.ai). Use when the user wants to turn app screenshots into store marketing images, create a cohesive screenshot set for an app listing, add device frames or headlines to captures, or prepare App Store / Google Play screenshot uploads."
 agent: agent
 ---
 
@@ -7,19 +7,20 @@ agent: agent
 
 Turn raw in-app captures into a **cohesive set** of App Store / Google Play marketing
 screenshots — each a device mockup on a designed background with an ASO-aware headline, all
-sharing one visual language. Runs on **[ModelRunner](https://modelrunner.run)** via its public
-MCP, using the purpose-built `hakankaan/app-store-screenshot-composer` wrapper, which encodes
-the consistency workflow so you don't have to hand-design each image.
+sharing one visual language. Runs on **[ModelRunner](https://modelrunner.ai)** via its public
+MCP, using the purpose-built `modelrunner/app-store-screenshot-composer` wrapper, which encodes
+the consistency workflow so you don't have to hand-design each image. If your app already calls
+ModelRunner, this reuses the same API key and request/poll pattern — no new integration.
 
-> Powered by ModelRunner — the unified inference API. Case study:
-> https://modelrunner.run/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study
+> Powered by ModelRunner — one API for image, video, audio, 3D, and text. Case study:
+> https://modelrunner.ai/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study
 
 ## Prerequisites
 
 1. **The ModelRunner MCP must be connected.** These steps call the tools `create_upload_url`,
    `run_model`, `wait_for_request`, and `get_wrapper`. If they are unavailable, connect the
    server at `https://mcp.modelrunner.run/mcp` (authorize with your ModelRunner account when prompted; keep a small balance at
-   https://modelrunner.run). In Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp`.
+   https://modelrunner.ai). In Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp`.
 2. **A shell** for streaming file bytes (`curl`). Screenshots are uploaded out-of-band, never
    sent through the model as tokens.
 
@@ -29,17 +30,22 @@ Ask the user for whatever is missing:
 
 - **Raw screenshots** — file paths (clean in-app captures, e.g. 1242×2688). One per store slide.
 - **App name** and a one-line **feature description per screen** (grounds styling + headlines).
-- **Brand color** — hex (pull from the app's theme if available).
+- **Brand color** — hex. Pull it from the app's own theme source (a `*Theme.swift`, a Color asset,
+  or design tokens) before asking — in the case study the brand teal `#0E9F94` came straight from
+  `RoomixTheme.swift`.
 - **Target device(s)** — e.g. `iphone_6_5`, `ipad_13` (see `references/device-dimensions.md`).
 - **Headlines/subheadlines** — optional; the wrapper auto-generates if omitted, but supplying
   ASO-aware copy is stronger (see `references/aso-copy-guide.md`).
 
 ## Before the first run: read the live schema
 
-Call `get_wrapper` for `hakankaan/app-store-screenshot-composer` and confirm the current
-**`device` enum**, `layout`, and `background_style` values. Enums can change; never hard-code
-them blind. See `references/wrapper-schema.md` for the field guide + known gotchas (notably: the
-`iphone_6_9` default value has 400'd when passed explicitly — prefer `iphone_6_5`).
+Call `get_wrapper` for `modelrunner/app-store-screenshot-composer` (or `get_wrapper_raw_schema` for
+the full, untruncated enums) and confirm the current **`device` enum**, `layout`, and
+`background_style` values. Enums can change; never hard-code them blind. The `device` enum now
+spans portrait, landscape, and alt-resolution variants (e.g. `iphone_6_5`, `iphone_6_5_1284`,
+`ipad_13`, `ipad_13_2064`, plus their `_landscape` forms). See `references/wrapper-schema.md` for
+the field guide + gotchas — notably: `iphone_6_9` is the schema **default** but is **not in the
+enum**, so passing it explicitly fails validation; pick a listed value like `iphone_6_5`.
 
 ## The workflow — anchor first, then style-reference the rest
 
@@ -60,7 +66,7 @@ wrapper reads the filename as a semantic hint for styling and headline relevance
 Run screenshot #1 with **NO** `style_reference`:
 ```
 run_model({
-  endpoint: "hakankaan/app-store-screenshot-composer",
+  endpoint: "modelrunner/app-store-screenshot-composer",
   input: {
     screenshot: "<hero file_url>",
     headline: "<hero headline>",
@@ -101,8 +107,11 @@ the app's keyword cluster across slides without repetition. Full guidance:
 
 ## Cost
 
-~$0.035–0.15 per generated image depending on the base model (`gpt-image-2/edit` is the premium,
-text-faithful option). Confirm live pricing from `get_wrapper` / the request's `totalPrice`.
+~$0.035–0.15 per generated image depending on the base model — the wrapper's default base averages
+~$0.035/run, while `openai/gpt-image-2/edit` (the premium, text-faithful option) bills $0.151 per
+output. Each `variants` output is billed separately, so set `variants: 1` for the cheapest run. In
+the case study, a full set of 12 screenshots (6 iPhone + 6 iPad) came to ≈ $1.66. Confirm live
+pricing from `get_wrapper` / the request's `totalPrice`.
 
 ## Output
 
@@ -142,30 +151,38 @@ browsers and Apple. Write the captions as one coordinated set, not six independe
 | 6 | Remove Clutter Instantly | Erase any object, reveal your space's true potential | remove object, erase, declutter |
 
 Full case study:
-https://modelrunner.run/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study
+https://modelrunner.ai/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study
 
 ---
 
 # Device dimensions & the wrapper `device` enum
 
-The `hakankaan/app-store-screenshot-composer` wrapper renders to fixed device canvases. Always
-confirm the **live** `device` enum with `get_wrapper` before a run — the values below are a guide,
-not a contract.
+The `modelrunner/app-store-screenshot-composer` wrapper renders to fixed device canvases. Always
+confirm the **live** `device` enum with `get_wrapper` (or `get_wrapper_raw_schema` for the full,
+untruncated list) before a run — the values below are a guide, not a contract.
 
-## Known enum values (verify with get_wrapper)
+## Live enum values (verify before use)
 
-| `device` value | Orientation | Target store size | Wrapper output (observed) |
-|---|---|---|---|
-| `iphone_6_5` | portrait | 1242 × 2688 | ~1232 × 2688 (within ~10px) |
-| `ipad_13`    | portrait | 2048 × 2732 | ~2048 × 2720 (within ~12px) |
+| `device` value | Orientation | Output size |
+|---|---|---|
+| `iphone_6_5` | portrait | 1242 × 2688 |
+| `iphone_6_5_landscape` | landscape | 2688 × 1242 |
+| `iphone_6_5_1284` | portrait | 1284 × 2778 |
+| `iphone_6_5_1284_landscape` | landscape | 2778 × 1284 |
+| `ipad_13` | portrait | 2048 × 2732 |
+| `ipad_13_landscape` | landscape | 2732 × 2048 |
+| `ipad_13_2064` | portrait | 2064 × 2752 |
+| `ipad_13_2064_landscape` | landscape | 2752 × 2064 |
 
-Both observed outputs have passed App Store Connect's dimension validation.
+In the case study, the `iphone_6_5` and `ipad_13` outputs landed a few pixels under target
+(~1232 × 2688 and ~2048 × 2720) and still passed App Store Connect's dimension validation.
 
 ## Gotcha: `iphone_6_9`
 
-`iphone_6_9` (1290 × 2796) is the wrapper's schema **default** but has **not** been accepted when
-passed explicitly (returns HTTP 400). Use `iphone_6_5` for the iPhone portrait slot. Re-check
-against `get_wrapper` — this may change.
+`iphone_6_9` (1290 × 2796) is the wrapper's schema **default** but is **not one of the enum's
+allowed values**, so passing it explicitly fails validation. Use a listed value such as
+`iphone_6_5` for the iPhone portrait slot. Re-check against `get_wrapper_raw_schema` — this may
+change.
 
 ## App Store Connect (reference)
 
@@ -184,12 +201,14 @@ render at ~1242 × 2688 satisfies Play as-is.
 
 ---
 
-# `hakankaan/app-store-screenshot-composer` — field guide
+# `modelrunner/app-store-screenshot-composer` — field guide
 
-Confirm the live schema + enums with `get_wrapper` before running; the values here are a guide.
-The wrapper composes a real app capture into a device mockup on a designed background sized to App
-Store device dimensions. Base models: `openai/gpt-image-2/edit` (strong text + faithful UI redraw)
-and the `bytedance/seedream` edit family. ~$0.035–0.15 per generated image.
+Confirm the live schema + enums with `get_wrapper` (or `get_wrapper_raw_schema` for full enums)
+before running; the values here are a guide. The wrapper composes a real app capture into a device
+mockup on a designed background sized to App Store device dimensions. Base models (per the live
+wrapper): `openai/gpt-image-2/edit` (strong text + faithful UI redraw; ~$0.151/output) and
+`bytedance/seedream-v5/edit`. The wrapper's default base averages ~$0.035/run; premium bases cost
+more — confirm the exact figure from `get_wrapper`.
 
 ## Inputs
 
@@ -198,7 +217,7 @@ and the `bytedance/seedream` edit family. ~$0.035–0.15 per generated image.
 | `screenshot` | file (url) | **Required.** The raw app capture. Name the upload meaningfully — the wrapper reads the filename as a semantic hint. |
 | `headline` | string | Auto-generated if omitted. Lead with a searchable benefit phrase. |
 | `subheadline` | string | Auto-generated if omitted. |
-| `device` | enum | e.g. `iphone_6_5`, `ipad_13`. See `device-dimensions.md` (+ the `iphone_6_9` 400 gotcha). |
+| `device` | enum | Portrait/landscape/alt-res variants, e.g. `iphone_6_5`, `iphone_6_5_1284`, `ipad_13`, `ipad_13_2064`. See `device-dimensions.md`. `iphone_6_9` is the schema default but **not** a valid enum value — don't pass it. |
 | `layout` | enum | `device_centered`, `device_angled`, `text_top`, `text_bottom`. |
 | `brand_color` | hex string | Accent / gradient color. Keep the SAME value across the set for cohesion. |
 | `background_style` | enum | `gradient_vibrant`, `soft_pastel`, `dark_premium`, `brand_solid`, `lifestyle_scene`. |

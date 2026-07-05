@@ -1,9 +1,11 @@
-# `hakankaan/app-store-screenshot-composer` — field guide
+# `modelrunner/app-store-screenshot-composer` — field guide
 
-Confirm the live schema + enums with `get_wrapper` before running; the values here are a guide.
-The wrapper composes a real app capture into a device mockup on a designed background sized to App
-Store device dimensions. Base models: `openai/gpt-image-2/edit` (strong text + faithful UI redraw)
-and the `bytedance/seedream` edit family. ~$0.035–0.15 per generated image.
+Confirm the live schema + enums with `get_wrapper` (or `get_wrapper_raw_schema` for full enums)
+before running; the values here are a guide. The wrapper composes a real app capture into a device
+mockup on a designed background sized to App Store device dimensions. Base models (per the live
+wrapper): `openai/gpt-image-2/edit` (strong text + faithful UI redraw; ~$0.151/output) and
+`bytedance/seedream-v5/edit`. The wrapper's default base averages ~$0.035/run; premium bases cost
+more — confirm the exact figure from `get_wrapper`.
 
 ## Inputs
 
@@ -12,7 +14,7 @@ and the `bytedance/seedream` edit family. ~$0.035–0.15 per generated image.
 | `screenshot` | file (url) | **Required.** The raw app capture. Name the upload meaningfully — the wrapper reads the filename as a semantic hint. |
 | `headline` | string | Auto-generated if omitted. Lead with a searchable benefit phrase. |
 | `subheadline` | string | Auto-generated if omitted. |
-| `device` | enum | e.g. `iphone_6_5`, `ipad_13`. See `device-dimensions.md` (+ the `iphone_6_9` 400 gotcha). |
+| `device` | enum | Portrait/landscape/alt-res variants, e.g. `iphone_6_5`, `iphone_6_5_1284`, `ipad_13`, `ipad_13_2064`. See `device-dimensions.md`. `iphone_6_9` is the schema default but **not** a valid enum value — don't pass it. |
 | `layout` | enum | `device_centered`, `device_angled`, `text_top`, `text_bottom`. |
 | `brand_color` | hex string | Accent / gradient color. Keep the SAME value across the set for cohesion. |
 | `background_style` | enum | `gradient_vibrant`, `soft_pastel`, `dark_premium`, `brand_solid`, `lifestyle_scene`. |
