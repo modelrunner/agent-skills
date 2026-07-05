@@ -17,6 +17,29 @@ Codex, Cursor, and GitHub Copilot**.
 `modelrunner/agent-skills` (add it with the [command below](#claude-code)). Two skills across four
 tool targets, built from the two [ModelRunner case studies](https://modelrunner.ai/blog).
 
+## Sample outputs
+
+Real, unretouched results from the two case studies these skills are built from — every image below
+was generated through the **[ModelRunner](https://modelrunner.ai)** MCP.
+
+**`app-store-screenshots`** — raw app captures → a cohesive, on-brand store set (device frames,
+generated backgrounds, ASO headlines), kept consistent via an anchor→style-reference pass:
+
+<p align="center">
+  <img src="https://media.modelrunner.ai/fkliHuJtWLyj2vW7V2DKH.png" width="30%" alt="App Store screenshot — anchor/hero frame" />
+  <img src="https://media.modelrunner.ai/41u9ifxUpl3jBQfgIXHP7.png" width="30%" alt="App Store screenshot — styled set frame" />
+  <img src="https://media.modelrunner.ai/jBymV90Fplip3geqsNjwK.png" width="30%" alt="App Store screenshot — styled set frame" />
+</p>
+
+**`ios-demo-assets`** — bulk, on-spec demo images loaded straight into Xcode's `Assets.xcassets`
+and the Simulator's Photos library:
+
+<p align="center">
+  <img src="https://media.modelrunner.ai/BSQAtgluDUFB7YyF1VpOo.png" width="30%" alt="iOS demo asset — interior room" />
+  <img src="https://media.modelrunner.ai/agOlqhWF7rZvA0UxarHjM.png" width="30%" alt="iOS demo asset — interior room" />
+  <img src="https://media.modelrunner.ai/P7MG6fy6tnZu2C7x-product-sectional-sofa.png" width="30%" alt="iOS demo asset — product shot" />
+</p>
+
 ## What's inside
 
 | Skill | What it does |
