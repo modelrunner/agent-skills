@@ -32,6 +32,10 @@ and authorize with your account when prompted (OAuth).
 In Claude Code, installing a plugin below wires the MCP for you; for other tools the MCP config
 ships in `dist/<tool>/`.
 
+> **Maintaining an open-source project?** ModelRunner gives active open-source
+> projects free monthly API credits — apply at
+> [modelrunner.ai/oss-program](https://modelrunner.ai/oss-program).
+
 ## Install
 
 ### Claude Code
