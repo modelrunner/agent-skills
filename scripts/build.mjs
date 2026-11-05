@@ -91,7 +91,9 @@ const keywordsFor = (name) => [
 // ---- adapters --------------------------------------------------------------
 function buildClaude(skills) {
   const base = join(DIST, 'claude');
-  const servers = { mcpServers: { [mcp.name]: { type: mcp.transport, url: mcp.url } } };
+  // The app tag attributes this marketplace's traffic (one slug for every plugin in it). The user MCP
+  // server forwards it onto the run; the other tools' header keys are unverified, so only this adapter sets it.
+  const servers = { mcpServers: { [mcp.name]: { type: mcp.transport, url: mcp.url, headers: { 'x-modelrunner-app': 'modelrunner-claude-code' } } } };
   const plugins = [];
   for (const s of skills) {
     const pluginDir = join(base, 'plugins', s.name);

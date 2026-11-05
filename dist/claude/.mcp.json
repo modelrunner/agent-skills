@@ -2,7 +2,10 @@
   "mcpServers": {
     "modelrunner": {
       "type": "http",
-      "url": "https://mcp.modelrunner.run/mcp"
+      "url": "https://mcp.modelrunner.run/mcp",
+      "headers": {
+        "x-modelrunner-app": "modelrunner-claude-code"
+      }
     }
   }
 }
