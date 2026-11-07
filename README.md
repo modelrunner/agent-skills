@@ -1,21 +1,22 @@
 # ModelRunner Agent Skills
 
-[![version](https://img.shields.io/badge/version-1.1.0-2ea44f)](https://github.com/modelrunner/agent-skills)
-[![skills](https://img.shields.io/badge/skills-2-3b82f6)](#whats-inside)
+[![version](https://img.shields.io/badge/version-1.2.0-2ea44f)](https://github.com/modelrunner/agent-skills)
+[![skills](https://img.shields.io/badge/skills-3-3b82f6)](#whats-inside)
 [![targets](https://img.shields.io/badge/targets-Claude_Codex_Cursor_Copilot-8957e5)](#install)
 [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-Portable AI-assistant **skills** for generating real product visuals — App Store screenshots and
-iOS demo assets — powered by **[ModelRunner](https://modelrunner.ai)**, the unified AI inference
+Portable AI-assistant **skills** for running any AI model and generating real product visuals —
+App Store screenshots and iOS demo assets — powered by **[ModelRunner](https://modelrunner.ai)**, the unified AI inference
 API. Authored once as [`SKILL.md`](https://modelrunner.ai) and built for **Claude Code, OpenAI
 Codex, Cursor, and GitHub Copilot**.
 
 > Each skill calls ModelRunner's public MCP server (`mcp.modelrunner.run`) — one API for image,
 > video, audio, 3D, and text that you can use for anything else at **[modelrunner.ai »](https://modelrunner.ai)**
 
-**Status:** v1.1.0 — published and live on the Claude Code plugin marketplace as
-`modelrunner/agent-skills` (add it with the [command below](#claude-code)). Two skills across four
-tool targets, built from the two [ModelRunner case studies](https://modelrunner.ai/blog).
+**Status:** v1.2.0 — published and live on the Claude Code plugin marketplace as
+`modelrunner/agent-skills` (add it with the [command below](#claude-code)). Three skills across four
+tool targets: a general `modelrunner` skill plus two built from the
+[ModelRunner case studies](https://modelrunner.ai/blog).
 
 ## Sample outputs
 
@@ -44,12 +45,13 @@ and the Simulator's Photos library:
 
 | Skill | What it does |
 |---|---|
+| **[`modelrunner`](skills/modelrunner/SKILL.md)** | The general one: find the right model for any image, video, audio, speech or 3D task, read its live schema and price, run it, and return the outputs. Covers uploads, batches, run tagging and cost. |
 | **[`app-store-screenshots`](skills/app-store-screenshots/SKILL.md)** | Turns raw app captures into a cohesive set of App Store / Google Play marketing screenshots — device mockups, on-brand backgrounds, and ASO-aware headlines. Uses the `modelrunner/app-store-screenshot-composer` wrapper and the anchor→style-reference pattern for a consistent set. [Case study »](https://modelrunner.ai/blog/generating-app-store-screenshots-with-ai-home-redesign-app-case-study) |
 | **[`ios-demo-assets`](skills/ios-demo-assets/SKILL.md)** | Bulk-generates on-spec demo images and loads them into Xcode's `Assets.xcassets` **and** the iOS Simulator's Photos library (`xcrun simctl addmedia`). [Case study »](https://modelrunner.ai/blog/generating-demo-assets-for-an-ios-app-with-ai) |
 
 ## Prerequisites
 
-Both skills call the **ModelRunner MCP**. Create a ModelRunner account with a small balance at
+Every skill calls the **ModelRunner MCP**. Create a ModelRunner account with a small balance at
 **[modelrunner.ai](https://modelrunner.ai)**, then connect the server at `https://mcp.modelrunner.run/mcp`
 and authorize with your account when prompted (OAuth).
 In Claude Code, installing a plugin below wires the MCP for you; for other tools the MCP config
@@ -64,8 +66,17 @@ ships in `dist/<tool>/`.
 ### Claude Code
 ```bash
 /plugin marketplace add modelrunner/agent-skills
+/plugin install modelrunner@modelrunner
 /plugin install app-store-screenshots@modelrunner
 /plugin install ios-demo-assets@modelrunner
+```
+
+### Any Agent Skills tool (`npx skills`)
+Installs the `SKILL.md` files into Claude Code, Codex, Cursor and other agents that read the
+[Agent Skills](https://skills.sh) format. It does not configure the MCP server, so connect
+`https://mcp.modelrunner.run/mcp` in your tool as well:
+```bash
+npx skills add modelrunner/agent-skills
 ```
 
 ### OpenAI Codex CLI
@@ -86,7 +97,7 @@ Copilot has no skill format, so each skill ships as a `/`-invokable prompt file:
 ```bash
 cp -R dist/copilot/.github dist/copilot/.vscode /path/to/your-project/
 ```
-Then run `/app-store-screenshots` or `/ios-demo-assets` in Copilot Chat.
+Then run `/modelrunner`, `/app-store-screenshots` or `/ios-demo-assets` in Copilot Chat.
 
 ## How it's built
 

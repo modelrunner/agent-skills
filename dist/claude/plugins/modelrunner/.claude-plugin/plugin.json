@@ -1,0 +1,29 @@
+{
+  "name": "modelrunner",
+  "displayName": "ModelRunner",
+  "description": "Generate or edit images, video, audio, speech, music and 3D, or run any AI model, through one API. Finds the right model for the job, reads its live input schema and price, runs it, and returns the output URLs. Powered by ModelRunner (https://modelrunner.ai). Use when the user asks to generate, edit, upscale, animate, voice, transcribe or otherwise produce media with AI, asks which AI model to use for a task or what it costs, or wants to run a specific model by name.",
+  "version": "1.2.0",
+  "author": {
+    "name": "ModelRunner",
+    "url": "https://modelrunner.ai"
+  },
+  "homepage": "https://modelrunner.ai",
+  "repository": "https://github.com/modelrunner/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "modelrunner",
+    "ai",
+    "skill",
+    "mcp",
+    "image-generation"
+  ],
+  "mcpServers": {
+    "modelrunner": {
+      "type": "http",
+      "url": "https://mcp.modelrunner.run/mcp",
+      "headers": {
+        "x-modelrunner-app": "modelrunner-claude-code"
+      }
+    }
+  }
+}

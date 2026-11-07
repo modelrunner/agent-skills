@@ -26,7 +26,8 @@ ModelRunner, this reuses the same API key and request/poll pattern — no new in
 1. **The ModelRunner MCP must be connected.** These steps call the tools `create_upload_url`,
    `run_model`, `wait_for_request`, and `get_wrapper`. If they are unavailable, connect the
    server at `https://mcp.modelrunner.run/mcp` (authorize with your ModelRunner account when prompted; keep a small balance at
-   https://modelrunner.ai). In Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp`.
+   https://modelrunner.ai). Installed as a Claude Code plugin, the server is already wired. To add
+   it by hand in Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp --header "x-modelrunner-app: modelrunner-claude-code"`.
 2. **A shell** for streaming file bytes (`curl`). Screenshots are uploaded out-of-band, never
    sent through the model as tokens.
 

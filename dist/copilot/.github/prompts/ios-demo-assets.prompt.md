@@ -19,7 +19,8 @@ user-facing backend.
 
 1. **The ModelRunner MCP must be connected** — tools `run_model`, `wait_for_request` (and
    `list_models` to browse). Connect `https://mcp.modelrunner.run/mcp` (authorize with your ModelRunner account; keep a small balance at
-   https://modelrunner.ai). Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp`.
+   https://modelrunner.ai). Installed as a Claude Code plugin, the server is already wired. To add
+   it by hand in Claude Code: `claude mcp add --transport http modelrunner https://mcp.modelrunner.run/mcp --header "x-modelrunner-app: modelrunner-claude-code"`.
 2. **Xcode + a booted iOS Simulator**, and a shell for `curl` / `xcrun`.
 
 ## Step 1 — Plan the set
